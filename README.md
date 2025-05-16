@@ -3,4 +3,4 @@
 ---
 ![Your Repository's Stats](https://github-readme-stats.vercel.app/api?username=bugsfreeweb&show_icons=true)
 ---
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=bugsfreeweb&layout=compact&theme=vision-friendly-dark)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=bugsfreeweb&layout=compact&theme=vision-friendly-dark)](https://github.com/bugsfreeweb/github-readme-stats)
