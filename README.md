@@ -24,11 +24,6 @@ When I'm not shipping code, I'm writing folk-street rap about love, culture, and
 ![Solidity](https://img.shields.io/badge/Solidity-363636?style=flat&logo=solidity&logoColor=white)
 ![Web3](https://img.shields.io/badge/Web3.js-F16822?style=flat&logo=web3.js&logoColor=white)
 
-**Top Languages**
-<p>
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs?username=bugsfreeweb&layout=compact&langs_count=8&theme=radical&hide_border=true&bg_color=0d1117&title_color=00ff9d&icon_color=00ff9d"/>
-</p>
-
 ## 🔥 Recent Projects
 
 | Project              | Description                                      | Tech Stack                     |
