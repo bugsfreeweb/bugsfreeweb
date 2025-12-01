@@ -42,7 +42,7 @@
 <a href="https://github.com/bugsfreeweb" target="_blank"><img style="margin: 10px" src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/ssh/ssh-original-wordmark.svg" alt="ssh" height="35" /></a>  
 </div>
 ---
-<div align="center">
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=bugsfreeweb&layout=compact&theme=vision-friendly-dark)](https://github.com/bugsfreeweb/github-readme-stats)
+  [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=bugsfreeweb&layout=compact&theme=vision-friendly-dark)](https://github.com/bugsfreeweb/github-readme-stats)
 ---
 [![MasterHead](https://raw.githubusercontent.com/bugsfreeweb/bugsfreeweb/main/images/bugsfree-footer.png)](https://bugsfreeweb.github.io/bugsfreeweb)
+<div align="center">
