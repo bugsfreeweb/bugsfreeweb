@@ -37,6 +37,10 @@ When I'm not shipping code, I'm writing folk-street rap about love, culture, and
 <div align="center">
   <img height="180em" src="https://github-readme-streak-stats.herokuapp.com/?user=bugsfreeweb&theme=radical&hide_border=true&background=0d1117&stroke=00ff9d&ring=00ff9d&fire=ff6b6b&currStreakLabel=00ff9d"/>
 </div>
+## 🌟 Most Used Languages
+<div align="center">
+  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=bugsfreeweb&layout=compact&theme=tokyonight" alt="langs" />
+</div>
 
 ## 👀 Profile Views
 
