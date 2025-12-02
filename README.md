@@ -39,7 +39,7 @@ When I'm not shipping code, I'm writing folk-street rap about love, culture, and
 </div>
 ## 🌟 Most Used Languages
 <div align="center">
-  ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=bugsfreeweb&theme=tokyonight)
+  <img src="https://your-vercel-app.vercel.app/api?username=bugsfreeweb&show_icons=true&count_private=true" />
 </div>
 
 ## 👀 Profile Views
