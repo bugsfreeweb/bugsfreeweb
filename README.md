@@ -39,7 +39,7 @@ When I'm not shipping code, I'm writing folk-street rap about love, culture, and
 </div>
 ## 🌟 Most Used Languages
 <div align="center">
-  /*<iframe width="600" height="600" src="https://ionicabizau.github.io/github-profile-languages/api.html?@bugsfreeweb" frameborder="0"></iframe>*/
+ <!--<iframe width="600" height="600" src="https://ionicabizau.github.io/github-profile-languages/api.html?@bugsfreeweb" frameborder="0"></iframe>-->
 </div>
 
 ## 👀 Profile Views
