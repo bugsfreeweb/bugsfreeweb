@@ -39,7 +39,7 @@ When I'm not shipping code, I'm writing folk-street rap about love, culture, and
 </div>
 ## 🌟 Most Used Languages
 <div align="center">
-  <img src="https://your-vercel-app.vercel.app/api?username=bugsfreeweb&show_icons=true&count_private=true" />
+  <iframe width="300" height="300" src="https://ionicabizau.github.io/github-profile-languages/api.html?@bugsfreeweb" frameborder="0"></iframe>
 </div>
 
 ## 👀 Profile Views
