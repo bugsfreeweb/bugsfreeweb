@@ -383,8 +383,8 @@
     .blog-item .meta {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      font-size: 0.85rem;
+      gap: 2rem;
+      font-size: 1rem;
       color: var(--text-light);
       margin-top: 1rem;
       padding-top: 1rem;
@@ -509,3 +509,4 @@
       .repos-grid, .activity-feed, .blog-posts { grid-template-columns: 1fr; }
 
     }
+
