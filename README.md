@@ -2,7 +2,7 @@
 
 # 👽 Bugsfree — Enjoying Alien Technology
 
-<img src="https://raw.githubusercontent.com/bugsfreeweb/bugsfreeweb/main/images/bugsfree-header.png" alt="Bugsfree Header" width="70%"/>
+<img src="https://raw.githubusercontent.com/bugsfreeweb/bugsfreeweb/main/img/bugsfree-header.png" alt="Bugsfree Header" width="70%"/>
 
 <br/>
 
