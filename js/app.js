@@ -200,7 +200,7 @@
               </div>
               <div class="meta">
                 <span><i data-feather="calendar"></i> ${pubDate}</span>
-                <span><i data-feather="user"></i> ${post.author || 'Bugsfree'}</span>
+                <span><i data-feather="user"></i> ${post.author-name || 'Bugsfree'}</span>
               </div>
             </div>
           </div>
@@ -234,5 +234,6 @@
       );
       renderPage(1); renderPagination();
     });
+
 
     loadData();
