@@ -200,7 +200,7 @@
               </div>
               <div class="meta">
                 <span><i data-feather="calendar"></i> ${pubDate}</span>
-                <span><i data-feather="user"></i> ${post.author-name || 'SilenceBTC'}</span>
+                <span><i data-feather="user"></i> ${post.author || 'Bugsfree'}</span>
               </div>
             </div>
           </div>
@@ -237,4 +237,5 @@
 
 
     loadData();
+
 
