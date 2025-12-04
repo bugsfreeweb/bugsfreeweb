@@ -253,7 +253,7 @@
       margin-top: 2rem;
     }
     .repo {
-      background: var(--card-bg);
+      background: rgba(99, 102, 241, 0.1);
       border-radius: 16px;
       padding: 1.75rem;
       border: 1px solid var(--border);
@@ -507,4 +507,5 @@
       .icon-btn { width: 40px; height: 40px; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
       .repos-grid, .activity-feed, .blog-posts { grid-template-columns: 1fr; }
+
     }
