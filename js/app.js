@@ -79,7 +79,7 @@
     
     // Welcome notification
     setTimeout(() => {
-      showNotification('🎉 Enhanced portfolio loaded with new features!', 'success');
+      showNotification('🎉 Enhanced portfolio loaded!', 'success');
     }, 3000);
 
     // Contact Modal
@@ -647,4 +647,5 @@
     }
 
     // Initialize data loading
+
     loadData();
