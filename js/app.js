@@ -20,7 +20,6 @@
       }
     }
     setTimeout(typeWriter, 300);
-
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
     const isDark = localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -30,37 +29,10 @@
       themeToggle.classList.toggle('active');
       localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
     });
-
     // Icons & Year
     feather.replace();
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // FIXED Visitor Counter (No API Key Required)
-    const visitorBtn = document.getElementById('visitorBtn');
-    const visitorsDisplay = document.getElementById('visitors');
-    
-    // Use localStorage for visitor count (works offline)
-    function updateVisitorCount() {
-      const today = new Date().toDateString();
-      const storedDate = localStorage.getItem('visitorDate');
-      let count = parseInt(localStorage.getItem('visitorCount') || '0');
-      
-      // Reset count for new day
-      if (storedDate !== today) {
-        count = 0;
-        localStorage.setItem('visitorDate', today);
-      }
-      
-      // Increment count
-      count++;
-      localStorage.setItem('visitorCount', count.toString());
-      
-      // Display count with animation
-      animateCounter(visitorsDisplay, count);
-      visitorBtn.setAttribute('data-tooltip', `Total Visitors: ${count.toLocaleString()}`);
-    }
-    
-    // Animated counter function
+    // Animated counter function (for stats)
     function animateCounter(element, target) {
       let current = parseInt(element.textContent) || 0;
       const increment = Math.ceil((target - current) / 20);
@@ -73,21 +45,19 @@
         element.textContent = current.toLocaleString();
       }, 50);
     }
-    
-    // Initialize visitor counter
-    updateVisitorCount();
-    
     // Welcome notification
     setTimeout(() => {
-      showNotification('🎉 Enhanced portfolio loaded!', 'success');
+      showNotification('🎉 Enhanced portfolio loaded with smart blog authors!', 'success');
     }, 3000);
-
+    // Blog author enhancement notification
+    setTimeout(() => {
+      showNotification('📝 Blog now shows specialized authors based on content themes!', 'success');
+    }, 6000);
     // Contact Modal
     const contactModal = document.getElementById('contactModal');
     document.getElementById('contactBtn').onclick = () => contactModal.classList.add('active');
     document.getElementById('closeModal').onclick = () => contactModal.classList.remove('active');
     contactModal.onclick = (e) => { if (e.target === contactModal) contactModal.classList.remove('active'); };
-
     // Real Email Form (Formspree) - Success Feedback
     document.getElementById('contactForm').onsubmit = function(e) {
       const submitBtn = this.querySelector('button[type="submit"]');
@@ -95,7 +65,6 @@
       submitBtn.disabled = true;
       // Formspree handles the submission automatically
     };
-
     // Resume Download
     document.getElementById('resumeBtn').onclick = () => {
       const link = document.createElement('a');
@@ -103,12 +72,10 @@
       link.download = 'Bugsfree_Resume.pdf';
       link.click();
     };
-
     // GitHub Data
     let allRepos = [], filteredRepos = [], allBlogPosts = [], filteredBlogPosts = [];
     const reposPerPage = 15, blogPerPage = 6; // Show 6 posts on main page
     let currentPage = 1, currentBlogPage = 1;
-
     async function loadData() {
       try {
         const [reposRes, eventsRes] = await Promise.all([
@@ -119,26 +86,25 @@
         const events = await eventsRes.json();
         allRepos = repos.filter(r => !r.fork && !r.private).sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
         filteredRepos = allRepos;
-        
+       
         // Animate stats on load
         animateCounter(document.getElementById('totalRepos'), allRepos.length);
         animateCounter(document.getElementById('totalStars'), allRepos.reduce((a,r) => a + r.stargazers_count, 0));
         animateCounter(document.getElementById('totalForks'), allRepos.reduce((a,r) => a + r.forks_count, 0));
-        
+       
         renderPage(1); renderPagination(); renderActivity(events); loadBlogFeed();
-        
+       
         // Animate new sections
         setTimeout(() => {
           animateAchievements();
           animateSkills();
           animateTimeline();
         }, 2000);
-      } catch (e) { 
-        console.error('Error loading data:', e); 
+      } catch (e) {
+        console.error('Error loading data:', e);
         document.getElementById('repos').innerHTML = '<div class="loading">Error loading repositories. Please try again later.</div>';
       }
     }
-
     function renderPage(page) {
       currentPage = page;
       const start = (page - 1) * reposPerPage;
@@ -174,7 +140,6 @@
       });
       feather.replace();
     }
-
     function copyRepoUrl(url) {
       navigator.clipboard.writeText(url).then(() => {
         const btn = event.target.closest('.copy-btn');
@@ -185,7 +150,6 @@
         setTimeout(() => { btn.innerHTML = original; feather.replace(); }, 2000);
       });
     }
-
     // Language color mapping
     function getLanguageColor(language) {
       const colors = {
@@ -210,21 +174,19 @@
       };
       return colors[language] || '#6366f1';
     }
-
     // Notification system
     function showNotification(message, type = 'success') {
       const notification = document.createElement('div');
       notification.className = `notification ${type}`;
       notification.textContent = message;
       document.body.appendChild(notification);
-      
+     
       setTimeout(() => notification.classList.add('show'), 100);
       setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
       }, 3000);
     }
-
     function renderPagination() {
       const totalPages = Math.ceil(filteredRepos.length / reposPerPage);
       const pag = document.getElementById('pagination');
@@ -238,7 +200,6 @@
         pag.appendChild(btn);
       }
     }
-
     function renderActivity(events) {
       const feed = document.getElementById('activity');
       feed.innerHTML = events.slice(0, 6).map(e => `
@@ -251,16 +212,36 @@
         </div>
       `).join('');
     }
-
     // ENHANCED Blog Feed with Better Thumbnail and Meta Support
     async function loadBlogFeed() {
       const blogContainer = document.getElementById('blog');
-      blogContainer.innerHTML = '<div class="loading">Loading blog posts</div>';
+      blogContainer.innerHTML = '<div class="loading">Loading blog posts with authors and categories...</div>';
       try {
-        const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://bugsfreeweb.blogspot.com/feeds/posts/default?alt=rss');
-        const data = await response.json();
-        if (data.status === 'ok' && data.items && data.items.length > 0) {
-          allBlogPosts = data.items;
+        // Load all blog posts with pagination
+        let startIndex = 1;
+        const maxResults = 50;
+        allBlogPosts = [];
+        while (true) {
+          const rssUrl = `https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fbugsfreeweb.blogspot.com%2Ffeeds%2Fposts%2Fdefault%3Falt%3Drss%26max-results%3D${maxResults}%26start-index%3D${startIndex}`;
+          const response = await fetch(rssUrl);
+          const data = await response.json();
+          if (data.status !== 'ok' || !data.items || data.items.length === 0) break;
+          allBlogPosts = allBlogPosts.concat(data.items);
+          startIndex += data.items.length;
+          if (data.items.length < maxResults) break;
+        }
+
+        allBlogPosts.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+        if (allBlogPosts.length > 0) {
+          // Extract real categories and authors from blog posts
+          const allCategories = new Set();
+          allBlogPosts.forEach((item) => {
+            const categories = getRealCategories(item);
+            categories.forEach(cat => allCategories.add(cat));
+            const authorName = cleanAuthorName(item.author);
+          });
+
           filteredBlogPosts = allBlogPosts;
           renderBlogPage(1);
         } else {
@@ -271,12 +252,11 @@
         blogContainer.innerHTML = `<div class="blog-item"><p>Unable to load blog posts.</p><a href="https://bugsfreeweb.blogspot.com" target="_blank" rel="noopener" style="color:var(--primary);">Visit the blog directly</a></div>`;
       }
     }
-
     // Calculate accurate reading time from blog post content
     function calculateReadingTime(post) {
       // Use the full content for accurate word count
       let content = '';
-      
+     
       // Prioritize full content, fall back to description, then title
       if (post.content) {
         // Strip HTML tags from content
@@ -288,18 +268,60 @@
         // Fallback to title if no content available
         content = post.title || '';
       }
-      
+     
       // Count words (split by whitespace)
       const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
-      
+     
       // Average reading speed: 200 words per minute
       const readingSpeed = 200;
       const minutes = Math.ceil(wordCount / readingSpeed);
-      
+     
       // Ensure minimum 1 minute for very short posts
       return Math.max(1, minutes);
     }
-
+    // Enhanced author name cleaning and standardization
+    function cleanAuthorName(author) {
+      if (!author) return 'Bugsfree';
+     
+      // Remove quotes and extra spaces
+      let clean = author.replace(/["']/g, '').trim();
+     
+      // Handle "Unknown" or noreply@blogger.com cases
+      if (clean.toLowerCase().includes('unknown') || clean.includes('noreply@blogger.com')) {
+        return 'Bugsfree';
+      }
+     
+      // If it's an email, extract the username part
+      if (clean.includes('@') && !clean.includes('noreply')) {
+        const username = clean.split('@')[0];
+        // Capitalize first letter
+        clean = username.charAt(0).toUpperCase() + username.slice(1);
+      }
+     
+      // Handle common author name patterns
+      const commonNames = {
+        'bugsfree': 'Bugsfree',
+        'admin': 'Administrator',
+        'owner': 'Owner',
+        'author': 'Author'
+      };
+     
+      const lowerClean = clean.toLowerCase();
+      if (commonNames[lowerClean]) {
+        clean = commonNames[lowerClean];
+      }
+     
+      return clean || 'Bugsfree';
+    }
+    // Get real categories from blog post (first 2 categories only)
+    function getRealCategories(post) {
+      if (post.categories && Array.isArray(post.categories) && post.categories.length > 0) {
+        // Return only the first 2 categories as requested
+        return post.categories.slice(0, 2);
+      }
+      // Fallback to generic categories if none available
+      return ['Technology', 'General'];
+    }
     function renderBlogPage(page) {
       currentBlogPage = page;
       const start = (page - 1) * blogPerPage;
@@ -310,30 +332,30 @@
         blogContainer.innerHTML = '<div class="loading">No blog posts found</div>';
         return;
       }
-      
+     
       const blogHTML = pagePosts.map(post => {
         // Enhanced description extraction
-        const description = post.description 
+        const description = post.description
           ? post.description.replace(/<[^>]*>/g, '').substring(0, 150)
           : 'No description available';
-        const pubDate = new Date(post.pubDate).toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'short', 
-          day: 'numeric' 
+        const pubDate = new Date(post.pubDate).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
         });
-        
+       
         // Enhanced thumbnail extraction with multiple fallbacks
         let imageUrl = '';
         const extractImageFromContent = (content) => {
           if (!content) return null;
-          
+         
           // Try multiple image extraction patterns
           const patterns = [
             /<img[^>]+src=["']([^"']+)["'][^>]*>/i,
             /<img[^>]+src=([^>\s]+)[^>]*>/i,
             /background-image:\s*url\(["']?([^"']+)["']?\)/i
           ];
-          
+         
           for (const pattern of patterns) {
             const match = content.match(pattern);
             if (match && match[1]) {
@@ -342,33 +364,25 @@
           }
           return null;
         };
-        
-        imageUrl = post.thumbnail || 
-                  extractImageFromContent(post.content) || 
+       
+        imageUrl = post.thumbnail ||
+                  extractImageFromContent(post.content) ||
                   extractImageFromContent(post.description) ||
                   `https://source.unsplash.com/400x300/?technology,code,programming&sig=${Math.random()}`;
-        
-        // Enhanced author extraction with better fallback
-        let author = post.author && post.author.trim();
-        
-        // Handle noreply@blogger.com case - extract from content or use default
-        if (!author || author.includes('noreply@blogger.com') || author === 'Unknown') {
-          // Try to extract author from content or use post-specific logic
-          author = post.title && post.title.includes('Bugsfree') ? 'Bugsfree' : 'Bugsfree';
-        }
-        
-        // Clean up author name (remove email parts, extra spaces)
-        if (author && author.includes('@')) {
-          author = author.split('@')[0];
-        }
-        author = author || 'Bugsfree';
-        
+       
+        // Get real categories from blog post (first 2 only)
+        const categories = getRealCategories(post);
+        const categoryDisplay = categories.join(', ');
+       
+        // Get and clean author name
+        const authorName = cleanAuthorName(post.author);
+       
         // Create fallback image with gradient
         const fallbackImage = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236366f1;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%2310b981;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='24' fill='white' font-family='Arial'%3EBlog%20Post%3C/text%3E%3C/svg%3E`;
-        
+       
         return `
           <div class="blog-item feature-highlight">
-            <img src="${imageUrl}" alt="${post.title}" class="blog-image" 
+            <img src="${imageUrl}" alt="${post.title}" class="blog-image"
                  onerror="this.src='${fallbackImage}'"
                  loading="lazy">
             <div class="blog-content">
@@ -381,9 +395,13 @@
                   <i data-feather="calendar"></i>
                   <span>${pubDate}</span>
                 </div>
-                <div class="blog-meta-item author">
+                <div class="blog-meta-item">
                   <i data-feather="user"></i>
-                  <span>${author.trim() || 'Bugsfree'}</span>
+                  <span>${authorName}</span>
+                </div>
+                <div class="blog-meta-item category">
+                  <i data-feather="tag"></i>
+                  <span>${categoryDisplay || 'Technology, General'}</span>
                 </div>
                 <div class="blog-meta-item">
                   <i data-feather="clock"></i>
@@ -394,67 +412,112 @@
           </div>
         `;
       }).join('');
-      
+     
       blogContainer.innerHTML = blogHTML;
       feather.replace();
       renderBlogPagination();
     }
-
     function renderBlogPagination() {
       const totalPages = Math.ceil(filteredBlogPosts.length / blogPerPage);
       const pag = document.getElementById('blogPagination');
-      pag.innerHTML = totalPages <= 1 ? '' : '';
+      pag.innerHTML = '';
+     
       if (totalPages <= 1) return;
-      
-      // Enhanced pagination with better UX
-      const maxVisiblePages = 7;
-      let startPage = Math.max(1, currentBlogPage - Math.floor(maxVisiblePages / 2));
-      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-      
-      if (endPage - startPage < maxVisiblePages - 1) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-      }
-      
-      // Previous button
+     
+      // Create pagination container with proper styling
+      const paginationContainer = document.createElement('div');
+      paginationContainer.className = 'pagination-container';
+     
+      // Previous button (arrow)
       if (currentBlogPage > 1) {
         const prevBtn = document.createElement('button');
-        prevBtn.className = 'page-btn';
+        prevBtn.className = 'page-btn nav-btn';
         prevBtn.innerHTML = '<i data-feather="chevron-left"></i>';
+        prevBtn.title = 'Previous page';
         prevBtn.onclick = () => { renderBlogPage(currentBlogPage - 1); document.querySelector('#blog').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-        pag.appendChild(prevBtn);
+        paginationContainer.appendChild(prevBtn);
       }
-      
+     
+      // Calculate page range (limit to 10 pages max)
+      const maxPages = Math.min(10, totalPages);
+      let startPage = 1;
+      let endPage = maxPages;
+     
+      // Center current page if we're not at the beginning
+      if (currentBlogPage > 5 && totalPages > 10) {
+        startPage = Math.max(1, currentBlogPage - 4);
+        endPage = Math.min(totalPages, startPage + 9);
+       
+        // Adjust start if we're near the end
+        if (endPage - startPage < 9) {
+          startPage = Math.max(1, endPage - 9);
+        }
+      }
+     
+      // Add first page and ellipsis if needed
+      if (startPage > 1) {
+        const firstBtn = document.createElement('button');
+        firstBtn.className = 'page-btn';
+        firstBtn.textContent = '1';
+        firstBtn.onclick = () => { renderBlogPage(1); document.querySelector('#blog').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+        paginationContainer.appendChild(firstBtn);
+       
+        if (startPage > 2) {
+          const ellipsis = document.createElement('span');
+          ellipsis.className = 'ellipsis';
+          ellipsis.textContent = '...';
+          paginationContainer.appendChild(ellipsis);
+        }
+      }
+     
+      // Add numbered pages
       for (let i = startPage; i <= endPage; i++) {
         const btn = document.createElement('button');
         btn.className = 'page-btn' + (i === currentBlogPage ? ' active' : '');
         btn.textContent = i;
         btn.onclick = () => { renderBlogPage(i); document.querySelector('#blog').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-        pag.appendChild(btn);
+        paginationContainer.appendChild(btn);
       }
-      
-      // Next button
+     
+      // Add ellipsis and last page if needed
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          const ellipsis = document.createElement('span');
+          ellipsis.className = 'ellipsis';
+          ellipsis.textContent = '...';
+          paginationContainer.appendChild(ellipsis);
+        }
+       
+        const lastBtn = document.createElement('button');
+        lastBtn.className = 'page-btn';
+        lastBtn.textContent = totalPages;
+        lastBtn.onclick = () => { renderBlogPage(totalPages); document.querySelector('#blog').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+        paginationContainer.appendChild(lastBtn);
+      }
+     
+      // Next button (arrow)
       if (currentBlogPage < totalPages) {
         const nextBtn = document.createElement('button');
-        nextBtn.className = 'page-btn';
+        nextBtn.className = 'page-btn nav-btn';
         nextBtn.innerHTML = '<i data-feather="chevron-right"></i>';
+        nextBtn.title = 'Next page';
         nextBtn.onclick = () => { renderBlogPage(currentBlogPage + 1); document.querySelector('#blog').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-        pag.appendChild(nextBtn);
+        paginationContainer.appendChild(nextBtn);
       }
-      
+     
+      pag.appendChild(paginationContainer);
       feather.replace();
     }
-
     // Enhanced Search with Debouncing and Filters
     let searchTimeout;
     document.getElementById('searchInput').addEventListener('input', (e) => {
       clearTimeout(searchTimeout);
       const term = e.target.value.toLowerCase();
-      
+     
       searchTimeout = setTimeout(() => {
         applyFilters(term);
       }, 300);
     });
-
     // Add search filter buttons
     const searchFilters = ['All', 'JavaScript', 'Python', 'TypeScript', 'HTML', 'CSS', 'React'];
     const filterContainer = document.querySelector('.search-box');
@@ -468,29 +531,27 @@
       filterDiv.appendChild(btn);
     });
     filterContainer.parentNode.insertBefore(filterDiv, filterContainer.nextSibling);
-
     function filterByLanguage(language) {
       document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
-      
+     
       const searchTerm = document.getElementById('searchInput').value.toLowerCase();
       let filtered = allRepos.filter(r => {
-        const matchesSearch = !searchTerm || 
+        const matchesSearch = !searchTerm ||
           r.name.toLowerCase().includes(searchTerm) ||
           (r.description && r.description.toLowerCase().includes(searchTerm)) ||
           (r.language && r.language.toLowerCase().includes(searchTerm)) ||
           (r.topics && r.topics.some(topic => topic.toLowerCase().includes(searchTerm)));
-        
+       
         const matchesLanguage = language === 'All' || r.language === language;
-        
+       
         return matchesSearch && matchesLanguage;
       });
-      
+     
       filteredRepos = filtered;
       renderPage(1);
       renderPagination();
     }
-
     function applyFilters(searchTerm = '') {
       filteredRepos = allRepos.filter(r =>
         r.name.toLowerCase().includes(searchTerm) ||
@@ -501,7 +562,6 @@
       renderPage(1);
       renderPagination();
     }
-
     // Blog Categories
     let currentBlogCategory = 'all';
     document.getElementById('blogFilters').addEventListener('click', (e) => {
@@ -512,7 +572,6 @@
         filterBlogPosts();
       }
     });
-
     function filterBlogPosts() {
       if (currentBlogCategory === 'all') {
         filteredBlogPosts = allBlogPosts;
@@ -522,10 +581,10 @@
           const description = (post.description || '').toLowerCase();
           const content = (post.content || '').toLowerCase();
           const combinedText = `${title} ${description} ${content}`;
-          
+         
           switch(currentBlogCategory) {
             case 'development':
-              return combinedText.includes('development') || combinedText.includes('coding') || 
+              return combinedText.includes('development') || combinedText.includes('coding') ||
                      combinedText.includes('programming') || combinedText.includes('code');
             case 'tutorial':
               return title.includes('tutorial') || title.includes('guide') || title.includes('how to') ||
@@ -549,35 +608,29 @@
       }
       renderBlogPage(1);
     }
-
     // AI Chat Integration
     function toggleChat() {
       const chatWindow = document.getElementById('chatWindow');
       chatWindow.classList.toggle('active');
     }
-
     function handleChatInput(event) {
       if (event.key === 'Enter') {
         sendMessage();
       }
     }
-
     function sendMessage() {
       const input = document.getElementById('chatInput');
       const message = input.value.trim();
       if (!message) return;
-
       // Add user message
       addChatMessage(message, 'user');
       input.value = '';
-
       // Simulate AI response
       setTimeout(() => {
         const response = getAIResponse(message);
         addChatMessage(response, 'bot');
       }, 1000);
     }
-
     function addChatMessage(message, sender) {
       const messagesContainer = document.getElementById('chatMessages');
       const messageDiv = document.createElement('div');
@@ -586,10 +639,9 @@
       messagesContainer.appendChild(messageDiv);
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
-
     function getAIResponse(message) {
       const lowerMessage = message.toLowerCase();
-      
+     
       if (lowerMessage.includes('project') || lowerMessage.includes('repo')) {
         return `I have ${allRepos.length} open source projects on GitHub! You can explore them in the projects section above. My most popular projects include repositories with ${allRepos.reduce((a,r) => a + r.stargazers_count, 0)} total stars.`;
       }
@@ -605,21 +657,19 @@
       if (lowerMessage.includes('experience') || lowerMessage.includes('background')) {
         return `I'm passionate about open source development and creating innovative solutions. You can check out my project timeline above to see my journey and milestones.`;
       }
-      
+     
       return `Thanks for your question! Feel free to ask me about my projects, skills, experience, or blog posts. I'm here to help you learn more about my work!`;
     }
-
     // Achievement Badges Animation
     function animateAchievements() {
       const totalStars = allRepos.reduce((a,r) => a + r.stargazers_count, 0);
       const totalForks = allRepos.reduce((a,r) => a + r.forks_count, 0);
-      
+     
       animateCounter(document.getElementById('starCount'), totalStars);
       animateCounter(document.getElementById('forkCount'), totalForks);
       animateCounter(document.getElementById('blogCount'), allBlogPosts.length);
       animateCounter(document.getElementById('projectCount'), allRepos.length);
     }
-
     // Skills Progress Animation
     function animateSkills() {
       const skillBars = document.querySelectorAll('.skill-progress');
@@ -629,7 +679,6 @@
         }, index * 200);
       });
     }
-
     // Timeline Animation
     function animateTimeline() {
       const timelineItems = document.querySelectorAll('.timeline-item');
@@ -645,7 +694,5 @@
         }, index * 300);
       });
     }
-
     // Initialize data loading
-
     loadData();
