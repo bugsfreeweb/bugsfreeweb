@@ -145,7 +145,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .theme-toggle.active::before { transform: translateX(28px); background: var(--secondary); }
-    .container { max-width: 1280px; margin: 0 auto; padding: 100px 2rem 4rem; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 100px 2rem 0.5rem; }
     .hero-section {
       text-align: center;
       padding: 1rem 0 2rem;
@@ -345,9 +345,53 @@
       font-weight: 600;
       min-width: 44px;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 2px;
     }
-    .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
-    .page-btn:hover:not(.active) { background: var(--bg-secondary); border-color: var(--primary); }
+    .page-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    }
+    .page-btn:hover:not(.active) {
+      background: var(--bg-secondary);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .page-btn.nav-btn {
+      min-width: 44px;
+      width: 44px;
+      padding: 10px;
+    }
+    .pagination-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .ellipsis {
+      padding: 10px 8px;
+      color: var(--text-light);
+      font-weight: 500;
+      user-select: none;
+    }
+    .blog-meta-item.category {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    .blog-meta-item.category i {
+      color: var(--primary);
+      width: 16px;
+      height: 16px;
+    }
     .activity-feed, .blog-posts {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -380,7 +424,7 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
-    
+   
     /* Enhanced Blog Meta Section */
     .blog-meta {
       display: flex;
@@ -517,7 +561,7 @@
       margin-top: 1rem;
       font-size: 0.95rem;
     }
-    
+   
     /* Additional Cool Features Styles */
     .feature-highlight {
       position: relative;
@@ -536,11 +580,11 @@
     .feature-highlight:hover::after {
       left: 100%;
     }
-    
+   
     .stats-counter {
       font-variant-numeric: tabular-nums;
     }
-    
+   
     .skill-tags {
       display: flex;
       flex-wrap: wrap;
@@ -555,7 +599,6 @@
       font-size: 0.8rem;
       font-weight: 500;
     }
-
     /* Enhanced Repo Cards */
     .repo {
       position: relative;
@@ -574,7 +617,7 @@
       pointer-events: none;
     }
     .repo:hover::after { opacity: 1; }
-    
+   
     .repo-language {
       position: absolute;
       bottom: 15px;
@@ -590,7 +633,7 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       z-index: 2;
     }
-    
+   
     .repo-stats {
       display: flex;
       gap: 1rem;
@@ -611,7 +654,6 @@
       height: 16px;
       color: var(--primary);
     }
-
     /* Notification System */
     .notification {
       position: fixed;
@@ -633,7 +675,6 @@
     }
     .notification.success { background: var(--secondary); }
     .notification.error { background: #ef4444; }
-
     /* Skills Radar Chart */
     .skills-section {
       margin: 2rem 0;
@@ -692,7 +733,6 @@
       border-radius: 3px;
       transition: width 1s ease;
     }
-
     /* Project Timeline */
     .timeline-section {
       margin: 2rem 0;
@@ -764,7 +804,6 @@
       color: var(--text-light);
       font-size: 0.9rem;
     }
-
     /* Achievement Badges */
     .achievements-section {
       margin: 2rem 0;
@@ -835,7 +874,6 @@
       font-weight: 800;
       color: var(--primary);
     }
-
     /* Enhanced Search Filters */
     .search-filters {
       display: flex;
@@ -860,7 +898,6 @@
       color: white;
       border-color: var(--primary);
     }
-
     /* Blog Categories */
     .blog-filters {
       display: flex;
@@ -885,7 +922,6 @@
       color: white;
       border-color: var(--secondary);
     }
-
     /* AI Chat Integration */
     .ai-chat {
       position: fixed;
@@ -931,7 +967,7 @@
       color: white;
       font-weight: 600;
       display: flex;
-      justify-content: between;
+      justify-content: space-between;
       align-items: center;
     }
     .chat-messages {
@@ -982,7 +1018,7 @@
       cursor: pointer;
       font-weight: 600;
     }
-    
+   
     @media (max-width: 768px) {
       header { padding: 1rem; }
       .container { padding: 90px 1rem 2rem; }
