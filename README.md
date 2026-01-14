@@ -61,7 +61,7 @@ When I'm not shipping code, I'm writing folk-street rap about love, culture, and
 
 <div align="center">
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-bugsfree.netlify.app-000000?style=for-the-badge&logo=google-chrome&logoColor=white)](https://bugsfree.netlify.app)
+[![Portfolio](https://img.shields.io/badge/Portfolio-bugsfree.vercel.app-000000?style=for-the-badge&logo=google-chrome&logoColor=white)](https://bugsfree.vercel.app)
 [![Twitter](https://img.shields.io/badge/@bugsfreeweb-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/bugsfreeweb)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-bugsfreeweb-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/bugsfreeweb)
 [![Telegram](https://img.shields.io/badge/@bugsfreeweb-0088cc?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/bugsfreeweb)
