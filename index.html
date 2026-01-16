@@ -10,6 +10,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/113718082?v=4&size=64">
   <link href="./css/styles.css" rel="stylesheet">
+  <link href="./css/comments.css" rel="stylesheet">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <!-- <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool@latest'></script> -->
  
 </head>
@@ -20,8 +26,21 @@
       <span>Bugsfree</span>
     </div>
     <div class="nav-icons">
+      <div class="user-profile-dropdown" id="userProfileDropdown" style="display: none;">
+        <div class="user-avatar-btn" id="userAvatarBtn">
+          <img src="" alt="User" id="userAvatarImg">
+        </div>
+        <div class="user-dropdown-menu" id="userDropdownMenu">
+          <div class="user-info">
+            <img src="" alt="User" id="dropdownUserAvatar">
+            <span id="dropdownUserName"></span>
+          </div>
+          <button class="dropdown-item" onclick="signOutFromSite()">
+            <i data-feather="log-out"></i> Sign Out
+          </button>
+        </div>
+      </div>
       <div class="icon-btn" id="contactBtn" title="Contact Me"><i data-feather="mail"></i></div>
-      <div class="icon-btn" id="resumeBtn" title="Download Resume"><i data-feather="download"></i></div>
       <div class="theme-toggle" id="themeToggle" title="Toggle Theme">
         <i data-feather="sun" style="position:absolute;left:8px;top:6px;width:18px;height:18px;"></i>
         <i data-feather="moon" style="position:absolute;right:8px;top:6px;width:18px;height:18px;"></i>
@@ -33,8 +52,20 @@
       <h1 class="hero-title" id="heroTitle"></h1>
       <p class="subtitle">Crafting reliable, innovative, and impactful code — one commit at a time</p>
     </div>
+    
+    <!-- Admin Projects Section (displayed at top of stats-grid) -->
+    <div class="admin-projects-section" id="adminProjectsSection" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title">Featured Projects</h2>
+        <p class="section-subtitle">Projects managed from admin panel</p>
+      </div>
+      <div id="adminProjects" class="repos-grid"></div>
+      <div class="pagination" id="adminProjectsPagination"></div>
+    </div>
+    
     <div class="stats-grid">
-      <div class="stat-card"><h3 id="totalRepos" class="stats-counter">0</h3><p>Total Projects</p></div>
+      <div class="stat-card"><h3 id="totalRepos" class="stats-counter">0</h3><p>GitHub Projects</p></div>
+      <div class="stat-card"><h3 id="totalAdminProjects" class="stats-counter">0</h3><p>Featured Projects</p></div>
       <div class="stat-card"><h3 id="totalStars" class="stats-counter">0</h3><p>Stars Earned</p></div>
       <div class="stat-card"><h3 id="totalForks" class="stats-counter">0</h3><p>Forks</p></div>
     </div>
@@ -49,109 +80,17 @@
       <p class="section-subtitle">Latest updates from GitHub</p>
     </div>
     <div id="activity" class="activity-feed"></div>
-    <div class="section-header">
-      <h2 class="section-title">Latest Blog Posts</h2>
-      <p class="section-subtitle">Thoughts, tutorials, and insights</p>
-    </div>
-    <div class="blog-filters" id="blogFilters">
-      <button class="category-btn active" data-category="all">All Posts</button>
-      <button class="category-btn" data-category="development">Development</button>
-      <button class="category-btn" data-category="tutorial">Tutorials</button>
-      <button class="category-btn" data-category="javascript">JavaScript</button>
-      <button class="category-btn" data-category="web">Web Dev</button>
-      <button class="category-btn" data-category="open-source">Open Source</button>
-      <button class="category-btn" data-category="tips">Tips & Tricks</button>
-    </div>
-    <div id="blog" class="blog-posts"></div>
-    <div class="pagination" id="blogPagination"></div>
-    <!-- Skills Radar Chart Section -->
-    <div class="skills-section">
+    
+    <!-- Admin Blog Posts Section -->
+    <div class="admin-blog-section" id="adminBlogSection" style="display: none;">
       <div class="section-header">
-        <h2 class="section-title">Technical Skills</h2>
-        <p class="section-subtitle">My expertise and proficiency levels</p>
+        <h2 class="section-title">Latest Blog Posts</h2>
+        <p class="section-subtitle">Thoughts, tutorials, and insights</p>
       </div>
-      <div class="skills-grid">
-        <div class="skill-item">
-          <div class="skill-icon" style="background: linear-gradient(135deg, #f7df1e, #ffeb3b);">JS</div>
-          <div class="skill-info">
-            <h4>JavaScript</h4>
-            <div class="skill-level"><div class="skill-progress" style="width: 95%"></div></div>
-          </div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-icon" style="background: linear-gradient(135deg, #61dafb, #00d4ff);">RE</div>
-          <div class="skill-info">
-            <h4>React</h4>
-            <div class="skill-level"><div class="skill-progress" style="width: 90%"></div></div>
-          </div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-icon" style="background: linear-gradient(135deg, #3776ab, #4b8bbe);">PY</div>
-          <div class="skill-info">
-            <h4>Python</h4>
-            <div class="skill-level"><div class="skill-progress" style="width: 85%"></div></div>
-          </div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-icon" style="background: linear-gradient(135deg, #3178c6, #5aa9e6);">TS</div>
-          <div class="skill-info">
-            <h4>TypeScript</h4>
-            <div class="skill-level"><div class="skill-progress" style="width: 88%"></div></div>
-          </div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-icon" style="background: linear-gradient(135deg, #38bdf8, #0ea5e9);">TW</div>
-          <div class="skill-info">
-            <h4>Tailwind CSS</h4>
-            <div class="skill-level"><div class="skill-progress" style="width: 92%"></div></div>
-          </div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-icon" style="background: linear-gradient(135deg, #68a063, #83cd29);">NO</div>
-          <div class="skill-info">
-            <h4>Node.js</h4>
-            <div class="skill-level"><div class="skill-progress" style="width: 80%"></div></div>
-          </div>
-        </div>
-      </div>
+      <div id="adminBlogPosts" class="blog-posts"></div>
+      <div class="pagination" id="adminBlogPagination"></div>
     </div>
-    <!-- Project Timeline Section -->
-    <div class="timeline-section">
-      <div class="section-header">
-        <h2 class="section-title">Project Timeline</h2>
-        <p class="section-subtitle">Key milestones and achievements</p>
-      </div>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <div class="timeline-date">2024</div>
-            <h3 class="timeline-title">Portfolio Website Launch</h3>
-            <p class="timeline-description">Created this comprehensive portfolio showcasing open source projects and technical expertise.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <div class="timeline-date">2023</div>
-            <h3 class="timeline-title">Open Source Contributions</h3>
-            <p class="timeline-description">Active contributor to various GitHub projects with focus on web development and automation tools.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <div class="timeline-date">2022</div>
-            <h3 class="timeline-title">Blog Creation</h3>
-            <p class="timeline-description">Started sharing technical knowledge and insights through blogging platform.</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <div class="timeline-date">2021</div>
-            <h3 class="timeline-title">First GitHub Repository</h3>
-            <p class="timeline-description">Published initial open source project and began contributing to developer community.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    
     <!-- Achievement Badges Section -->
     <div class="achievements-section">
       <div class="section-header">
@@ -194,26 +133,65 @@
       </div>
     </div>
   </div>
-  <!-- AI Chat Integration -->
-  <div class="ai-chat">
-    <div class="chat-window" id="chatWindow">
-      <div class="chat-header">
-        <span>AI Assistant</span>
-        <button class="close-chat" onclick="toggleChat()" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">×</button>
-      </div>
-      <div class="chat-messages" id="chatMessages">
-        <div class="chat-message bot">
-          Hi! I'm your AI assistant. Ask me about my projects, skills, or experience!
+  <!-- Premium Floating Support Widget -->
+  <div class="support-widget">
+    <button class="support-toggle" id="supportToggle" title="Contact Support">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span class="support-badge" id="supportBadge" style="display: none;">0</span>
+    </button>
+    <div class="support-window" id="supportWindow">
+      <div class="support-header">
+        <div class="support-header-content">
+          <div class="support-header-left">
+            <div class="support-avatar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <div class="support-header-info">
+              <h3>Support Team</h3>
+              <div class="support-status">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Online</span>
+              </div>
+            </div>
+          </div>
+          <button class="close-support" id="closeSupport" title="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
         </div>
       </div>
-      <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Ask me anything..." onkeypress="handleChatInput(event)">
-        <button onclick="sendMessage()">Send</button>
+      <div class="support-messages" id="supportMessages">
+        <div class="welcome-message">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <h4>Welcome to Support!</h4>
+          <p>How can we help you today? Send us a message and we'll respond as soon as possible.</p>
+        </div>
+        <div class="quick-replies">
+          <span class="quick-reply-chip" onclick="quickReply('I have a question about a project')">I have a question</span>
+          <span class="quick-reply-chip" onclick="quickReply('I need help with a bug')">Report a bug</span>
+          <span class="quick-reply-chip" onclick="quickReply('I want to collaborate')">Collaboration</span>
+        </div>
+      </div>
+      <div class="support-input-area">
+        <div class="input-wrapper">
+          <input type="text" id="supportInput" placeholder="Type your message..." autocomplete="off">
+        </div>
+        <button class="support-send-btn" id="supportSendBtn" title="Send message">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
       </div>
     </div>
-    <button class="chat-toggle" onclick="toggleChat()" title="Chat with AI">
-      💬
-    </button>
   </div>
   <!-- Contact Modal with Real Email (Formspree) -->
   <div class="modal" id="contactModal">
@@ -228,9 +206,259 @@
       </form>
     </div>
   </div>
+  <!-- Blog Post Details Modal -->
+  <div class="modal" id="blogPostModal">
+    <div class="modal-content blog-post-modal-content">
+      <button class="modal-close-btn" onclick="closePostModal()">
+        <i data-feather="x"></i>
+      </button>
+      <div id="blogPostContent">
+        <!-- Blog post content will be dynamically inserted here -->
+      </div>
+      
+      <!-- Comments Section -->
+      <div class="comments-section" id="blogCommentsSection" style="display: none;">
+        <div class="comments-header">
+          <h3>Discussion</h3>
+          <span class="comments-count" id="blogCommentsCount">0</span>
+        </div>
+        
+        <!-- Auth Required -->
+        <div class="comments-auth" id="blogCommentsAuth">
+          <div class="comments-auth-icon">
+            <i data-feather="message-circle"></i>
+          </div>
+          <h4>Join the Conversation</h4>
+          <p>Sign in with Google to share your thoughts</p>
+          <button class="google-signin-btn" onclick="window.commentsSystem?.signIn()">
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </div>
+        
+        <!-- Comment Form -->
+        <div class="comments-form" id="blogCommentsForm" style="display: none;">
+          <div class="comment-user-info">
+            <img src="" alt="" class="comment-user-avatar" id="blogCommentUserAvatar">
+            <span class="comment-user-name" id="blogCommentUserName"></span>
+          </div>
+          <div class="comment-form-content">
+            <div class="comment-textarea-wrapper">
+              <textarea
+                class="comment-textarea"
+                id="blogCommentText"
+                placeholder="Share your thoughts..."
+                maxlength="1000"
+              ></textarea>
+            </div>
+            <div class="comment-form-footer">
+              <span class="comment-char-count" id="blogCommentCharCount">0/1000</span>
+              <button class="comment-submit-btn" id="blogSubmitComment" disabled>
+                <i data-feather="send"></i> Post Comment
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-list" id="blogCommentsList">
+          <!-- Comments will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Project Details Modal -->
+  <div class="modal" id="projectDetailModal">
+    <div class="modal-content blog-post-modal-content">
+      <button class="modal-close-btn" onclick="closeProjectModal()">
+        <i data-feather="x"></i>
+      </button>
+      <div id="projectDetailContent">
+        <!-- Project content will be dynamically inserted here -->
+      </div>
+      
+      <!-- Comments Section -->
+      <div class="comments-section" id="projectCommentsSection" style="display: none;">
+        <div class="comments-header">
+          <h3>Discussion</h3>
+          <span class="comments-count" id="projectCommentsCount">0</span>
+        </div>
+        
+        <!-- Auth Required -->
+        <div class="comments-auth" id="projectCommentsAuth">
+          <div class="comments-auth-icon">
+            <i data-feather="message-circle"></i>
+          </div>
+          <h4>Join the Conversation</h4>
+          <p>Sign in with Google to share your thoughts</p>
+          <button class="google-signin-btn" onclick="window.commentsSystem?.signIn()">
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </div>
+        
+        <!-- Comment Form -->
+        <div class="comments-form" id="projectCommentsForm" style="display: none;">
+          <div class="comment-user-info">
+            <img src="" alt="" class="comment-user-avatar" id="projectCommentUserAvatar">
+            <span class="comment-user-name" id="projectCommentUserName"></span>
+          </div>
+          <div class="comment-form-content">
+            <div class="comment-textarea-wrapper">
+              <textarea
+                class="comment-textarea"
+                id="projectCommentText"
+                placeholder="Share your thoughts..."
+                maxlength="1000"
+              ></textarea>
+            </div>
+            <div class="comment-form-footer">
+              <span class="comment-char-count" id="projectCommentCharCount">0/1000</span>
+              <button class="comment-submit-btn" id="projectSubmitComment" disabled>
+                <i data-feather="send"></i> Post Comment
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-list" id="projectCommentsList">
+          <!-- Comments will be loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comments Toast Container -->
+  <div class="comments-toast-container" id="commentsToast"></div>
+  
   <footer>
     <p>© <span id="year"></span> <a href="/">Bugsfree</a> Built with Passion • Powered by Open Source</p>
   </footer>
- <script src="./js/app.js"></script>
+  <!-- Firebase Configuration from config.js -->
+  <script src="./js/firebase/config.js"></script>
+  
+  <script src="./js/app.js"></script>
+  
+  <!-- Comments System -->
+  <script src="./js/comments.js"></script>
+  
+  <!-- Firebase Analytics Integration -->
+  <script>
+    // Track page view function using Firebase 8.x compatibility API
+    async function trackPageView(pagePath, pageTitle) {
+      // Wait for Firebase to be ready
+      if (!window.firebaseServices || !window.firebaseServices.db) {
+        console.warn('Firebase DB not ready for tracking');
+        return;
+      }
+      
+      const db = window.firebaseServices.db;
+      const today = new Date().toISOString().split('T')[0];
+      const sessionId = sessionStorage.getItem('sessionId') || generateSessionId();
+      
+      if (!sessionStorage.getItem('sessionId')) {
+        sessionStorage.setItem('sessionId', sessionId);
+      }
+
+      try {
+        // Track daily visit using compat API
+        const dailyRef = db.collection('daily_stats').doc(today);
+        const dailyDoc = await dailyRef.get();
+        
+        if (dailyDoc.exists) {
+          await dailyRef.set({
+            visits: dailyDoc.data().visits + 1,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        } else {
+          await dailyRef.set({
+            date: today,
+            visits: 1,
+            uniqueVisitors: 1,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+
+        // Track page view
+        const pageRef = db.collection('page_views').doc(`${today}_${pagePath}`);
+        await pageRef.set({
+          pagePath,
+          pageTitle,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          sessionId
+        }, { merge: true });
+
+        // Track unique visitor
+        const visitorRef = db.collection('visitors').doc(sessionId);
+        const visitorDoc = await visitorRef.get();
+        
+        if (!visitorDoc.exists) {
+          await visitorRef.set({
+            firstVisit: firebase.firestore.FieldValue.serverTimestamp(),
+            lastVisit: firebase.firestore.FieldValue.serverTimestamp(),
+            userAgent: navigator.userAgent
+          });
+        } else {
+          await visitorRef.set({
+            lastVisit: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        }
+
+        console.log('Page view tracked successfully');
+      } catch (error) {
+        // Silently handle permission errors - tracking is non-critical
+        if (error.code !== 'permission-denied') {
+          console.error('Error tracking page view:', error);
+        }
+      }
+    }
+
+    function generateSessionId() {
+      return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // Track initial page view after a short delay to ensure Firebase is initialized
+    function trackInitialPageView() {
+      trackPageView(window.location.pathname, document.title);
+    }
+
+    // Wait for Firebase to be ready (up to 2 seconds)
+    let attempts = 0;
+    const checkFirebase = setInterval(() => {
+      attempts++;
+      if (window.firebaseServices && window.firebaseServices.db) {
+        clearInterval(checkFirebase);
+        trackInitialPageView();
+      } else if (attempts >= 20) { // 2 seconds max wait
+        clearInterval(checkFirebase);
+        console.warn('Firebase not ready, skipping page view tracking');
+      }
+    }, 100);
+
+    // Track page views on navigation (for SPAs)
+    let lastPath = window.location.pathname;
+    const observer = new MutationObserver(() => {
+      if (window.location.pathname !== lastPath) {
+        lastPath = window.location.pathname;
+        trackPageView(window.location.pathname, document.title);
+      }
+    });
+
+    // Listen for history API changes
+    window.addEventListener('popstate', () => {
+      trackPageView(window.location.pathname, document.title);
+    });
+  </script>
 </body>
 </html>
